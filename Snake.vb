@@ -54,21 +54,24 @@
 
     Sub Collision()
         Dim g As Graphics = PictureBox1.CreateGraphics
+        'Handles Cherry Collision
         If snakeHead = cherry Then
             snakeLength += 1
             cherry = New Point(Rnd(1) * boardSize, Rnd(1) * boardSize)
         End If
         g.FillRectangle(New SolidBrush(Color.OrangeRed), CInt(PictureBox1.Width * (cherry.X / boardSize)), CInt(PictureBox1.Height * (cherry.Y / boardSize)), CInt(PictureBox1.Width / boardSize), CInt(PictureBox1.Height / boardSize))
 
+        'Handles Wall Collision
         If boardSize - 1 < snakeHead.X Or boardSize - 1 < snakeHead.Y Or 0 > snakeHead.X Or 0 > snakeHead.Y Then
             gameStop = True
         End If
 
-        For i = 1 To snakeBody.Count
-            If snakeHead = snakeBody.Item(i) Then
-                gameStop = True
-            End If
-        Next
+        'Handles Body Collision
+        For i = 1 To snakeBody.Count - 1
+                If snakeHead = snakeBody.Item(i) Then
+                    gameStop = True
+                End If
+            Next
     End Sub
 
     Sub GameBoard()
@@ -88,12 +91,24 @@
         Dim keyPressed As String = e.KeyChar.ToString
         Select Case keyPressed
             Case "w"
+                If currentDirection = Directions.DOWN Then
+                    Return
+                End If
                 currentDirection = Directions.UP
             Case "a"
+                If currentDirection = Directions.RIGHT Then
+                    Return
+                End If
                 currentDirection = Directions.LEFT
             Case "s"
+                If currentDirection = Directions.UP Then
+                    Return
+                End If
                 currentDirection = Directions.DOWN
             Case "d"
+                If currentDirection = Directions.LEFT Then
+                    Return
+                End If
                 currentDirection = Directions.RIGHT
             Case vbCr
                 StartGame()
