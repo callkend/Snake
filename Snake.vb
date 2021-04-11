@@ -57,6 +57,7 @@ Public Class Snake
         'Resets Snake points
         snakeHead = New Point(8, 8)
         snakeLength = 4
+        snakeBody.Clear()
 
         'Draws Cherry
         cherry = New Point(Rnd(1) * boardSize, Rnd(1) * boardSize)
