@@ -99,7 +99,7 @@ Partial Class Snake
         'Timer1
         '
         Me.Timer1.Enabled = True
-        Me.Timer1.Interval = 500
+        Me.Timer1.Interval = 250
         '
         'Snake
         '
