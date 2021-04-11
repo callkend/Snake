@@ -14,7 +14,6 @@ Public Class Snake
         RUN
         STOPGAME
     End Enum
-
     Dim snakeHead As Point = New Point(8, 8)
     Dim currentDirection As Int16
     Dim snakeBody As List(Of Point) = New List(Of Point)
@@ -205,7 +204,6 @@ Public Class Snake
             Case GameStates.STOPGAME
                 GameOver()
         End Select
-
 
     End Sub
 End Class
