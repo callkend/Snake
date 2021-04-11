@@ -33,6 +33,7 @@ Partial Class Snake
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.StartLabel = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -101,11 +102,24 @@ Partial Class Snake
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 500
         '
+        'StartLabel
+        '
+        Me.StartLabel.AutoSize = True
+        Me.StartLabel.BackColor = System.Drawing.SystemColors.Control
+        Me.StartLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
+        Me.StartLabel.Location = New System.Drawing.Point(142, 312)
+        Me.StartLabel.Name = "StartLabel"
+        Me.StartLabel.Size = New System.Drawing.Size(144, 20)
+        Me.StartLabel.TabIndex = 4
+        Me.StartLabel.Text = "Press Enter to Start"
+        Me.StartLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'Snake
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(438, 447)
+        Me.Controls.Add(Me.StartLabel)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Name = "Snake"
@@ -127,4 +141,5 @@ Partial Class Snake
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents StartLabel As Label
 End Class

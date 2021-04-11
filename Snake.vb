@@ -6,22 +6,45 @@
         RIGHT
     End Enum
 
+    Enum GameStates
+        PREGAME
+        START
+        RUN
+        STOPGAME
+    End Enum
+
     Dim snakeHead As Point = New Point(8, 8)
     Dim currentDirection As Int16
     Dim snakeBody As List(Of Point) = New List(Of Point)
     Dim snakeLength As Int16 = 4
     Dim cherry As Point
-    Const boardSize As Int16 = 16
     Dim gameStop As Boolean = False
+    Dim gameState As Int16 = GameStates.PREGAME
+    Const boardSize As Int16 = 16
+    Dim Corner As Point = New Point(0, 0)
+
+    Sub PreGame()
+        Dim g As Graphics = PictureBox1.CreateGraphics
+        Dim startimage As Image = Image.FromFile("C:\Users\callk\source\repos\Snake\SnakeStartScreen.png")
+
+        g.DrawImage(startimage, Corner)
+        StartLabel.Visible = Not StartLabel.Visible
+    End Sub
 
     Sub StartGame()
         Randomize()
         Dim g As Graphics = PictureBox1.CreateGraphics
+
+        g.Clear(PictureBox1.BackColor)
+        StartLabel.Visible = False
         GameBoard()
+
         snakeHead = New Point(8, 8)
         snakeLength = 4
         cherry = New Point(Rnd(1) * boardSize, Rnd(1) * boardSize)
         g.FillRectangle(New SolidBrush(Color.OrangeRed), CInt(PictureBox1.Width * (cherry.X / boardSize)), CInt(PictureBox1.Height * (cherry.Y / boardSize)), CInt(PictureBox1.Width / boardSize), CInt(PictureBox1.Height / boardSize))
+        gameState = GameStates.RUN
+
     End Sub
 
     Sub snakeDraw()
@@ -64,13 +87,15 @@
         'Handles Wall Collision
         If boardSize - 1 < snakeHead.X Or boardSize - 1 < snakeHead.Y Or 0 > snakeHead.X Or 0 > snakeHead.Y Then
             gameStop = True
+            gameState = GameStates.STOPGAME
         End If
 
         'Handles Body Collision
         For i = 1 To snakeBody.Count - 1
                 If snakeHead = snakeBody.Item(i) Then
-                    gameStop = True
-                End If
+                gameStop = True
+                gameState = GameStates.STOPGAME
+            End If
             Next
     End Sub
 
@@ -85,6 +110,12 @@
 
         boardPen.Dispose()
         g.Dispose()
+    End Sub
+
+    Sub GameOver()
+        Dim g As Graphics = PictureBox1.CreateGraphics
+
+        'g.DrawString("Score:" + CStr(snakeLength - 4), SolidBrush(Color.Black), Corner)
     End Sub
 
     Private Sub WASD_Press(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
@@ -111,14 +142,26 @@
                 End If
                 currentDirection = Directions.RIGHT
             Case vbCr
-                StartGame()
+                If gameState = GameStates.PREGAME Then
+                    gameState = GameStates.START
+                ElseIf gameState = GameStates.STOPGAME Then
+                    gameState = GameStates.PREGAME
+                End If
 
         End Select
     End Sub
 
     Private Sub Timer_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Select Case gameState
+            Case GameStates.PREGAME
+                PreGame()
+            Case GameStates.START
+                StartGame()
+            Case GameStates.RUN
+                snakeDraw()
+            Case GameStates.STOPGAME
+        End Select
 
-        snakeDraw()
 
     End Sub
 End Class
