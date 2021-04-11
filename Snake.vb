@@ -24,11 +24,20 @@
     Dim Corner As Point = New Point(0, 0)
 
     Sub PreGame()
+        Static flipFlop As Boolean
         Dim g As Graphics = PictureBox1.CreateGraphics
         Dim startimage As Image = Image.FromFile("C:\Users\callk\source\repos\Snake\SnakeStartScreen.png")
 
         g.DrawImage(startimage, Corner)
-        StartLabel.Visible = Not StartLabel.Visible
+
+        If flipFlop = True Then
+            g.DrawString("Press Enter to Start", New Font("Arial", 16), New SolidBrush(Color.Black), New Point(80, 300))
+            flipFlop = False
+            Return
+        End If
+        flipFlop = True
+        'StartLabel.Visible = Not StartLabel.Visible
+        g.Dispose()
     End Sub
 
     Sub StartGame()
@@ -38,13 +47,14 @@
         g.Clear(PictureBox1.BackColor)
         StartLabel.Visible = False
         GameBoard()
-
+        '
+        gameStop = False
         snakeHead = New Point(8, 8)
         snakeLength = 4
         cherry = New Point(Rnd(1) * boardSize, Rnd(1) * boardSize)
         g.FillRectangle(New SolidBrush(Color.OrangeRed), CInt(PictureBox1.Width * (cherry.X / boardSize)), CInt(PictureBox1.Height * (cherry.Y / boardSize)), CInt(PictureBox1.Width / boardSize), CInt(PictureBox1.Height / boardSize))
         gameState = GameStates.RUN
-
+        g.Dispose()
     End Sub
 
     Sub snakeDraw()
@@ -60,19 +70,20 @@
                 Case Directions.RIGHT
                     snakeHead = New Point(snakeHead.X + 1, snakeHead.Y)
             End Select
-            g.FillRectangle(Brushes.Blue, CInt(PictureBox1.Width * (snakeHead.X / boardSize)), CInt(PictureBox1.Height * (snakeHead.Y / boardSize)), CInt(PictureBox1.Width / boardSize), CInt(PictureBox1.Height / boardSize))
+            g.FillRectangle(Brushes.Blue, CInt(PictureBox1.Width * (snakeHead.X / boardSize) + 1), CInt(PictureBox1.Height * (snakeHead.Y / boardSize) + 1), CInt(PictureBox1.Width / boardSize) - 1, CInt(PictureBox1.Height / boardSize) - 1)
 
             snakeBody.Insert(0, snakeHead)
 
             If snakeBody.Count > snakeLength Then
-                'Erease thing
+                'Erase thing
                 Dim rattle As Point = snakeBody.Last()
-                g.FillRectangle(New SolidBrush(Me.BackColor), CInt(PictureBox1.Width * (rattle.X / boardSize)), CInt(PictureBox1.Height * (rattle.Y / boardSize)), CInt(PictureBox1.Width / boardSize), CInt(PictureBox1.Height / boardSize))
+                g.FillRectangle(New SolidBrush(Me.BackColor), CInt(PictureBox1.Width * (rattle.X / boardSize) + 1), CInt(PictureBox1.Height * (rattle.Y / boardSize) + 1), CInt(PictureBox1.Width / boardSize - 1), CInt(PictureBox1.Height / boardSize) - 1)
 
                 snakeBody.Remove(rattle)
             End If
         End If
         Collision()
+        g.Dispose()
     End Sub
 
     Sub Collision()
@@ -82,7 +93,7 @@
             snakeLength += 1
             cherry = New Point(Rnd(1) * boardSize, Rnd(1) * boardSize)
         End If
-        g.FillRectangle(New SolidBrush(Color.OrangeRed), CInt(PictureBox1.Width * (cherry.X / boardSize)), CInt(PictureBox1.Height * (cherry.Y / boardSize)), CInt(PictureBox1.Width / boardSize), CInt(PictureBox1.Height / boardSize))
+        g.FillRectangle(New SolidBrush(Color.OrangeRed), CInt(PictureBox1.Width * (cherry.X / boardSize) + 1), CInt(PictureBox1.Height * (cherry.Y / boardSize) + 1), CInt(PictureBox1.Width / boardSize) - 1, CInt(PictureBox1.Height / boardSize) - 1)
 
         'Handles Wall Collision
         If boardSize - 1 < snakeHead.X Or boardSize - 1 < snakeHead.Y Or 0 > snakeHead.X Or 0 > snakeHead.Y Then
@@ -92,11 +103,13 @@
 
         'Handles Body Collision
         For i = 1 To snakeBody.Count - 1
-                If snakeHead = snakeBody.Item(i) Then
+            If snakeHead = snakeBody.Item(i) Then
                 gameStop = True
                 gameState = GameStates.STOPGAME
             End If
-            Next
+        Next
+
+        g.Dispose()
     End Sub
 
     Sub GameBoard()
@@ -114,8 +127,13 @@
 
     Sub GameOver()
         Dim g As Graphics = PictureBox1.CreateGraphics
+        Dim overImage As Image = Image.FromFile("C:\Users\callk\source\repos\Snake\SnakeGameoverScreen.png")
 
-        'g.DrawString("Score:" + CStr(snakeLength - 4), SolidBrush(Color.Black), Corner)
+        g.DrawImage(overImage, Corner)
+        g.DrawString("Score:" + CStr(snakeLength - 4), New Font("Arial", 16), New SolidBrush(Color.Black), New Point(100, 300))
+
+        g.Dispose()
+        overImage.Dispose()
     End Sub
 
     Private Sub WASD_Press(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
@@ -160,6 +178,7 @@
             Case GameStates.RUN
                 snakeDraw()
             Case GameStates.STOPGAME
+                GameOver()
         End Select
 
 

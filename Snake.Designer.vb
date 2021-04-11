@@ -48,7 +48,7 @@ Partial Class Snake
         '
         Me.PictureBox1.Location = New System.Drawing.Point(12, 31)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(407, 407)
+        Me.PictureBox1.Size = New System.Drawing.Size(400, 400)
         Me.PictureBox1.TabIndex = 2
         Me.PictureBox1.TabStop = False
         '
@@ -58,7 +58,7 @@ Partial Class Snake
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(438, 28)
+        Me.MenuStrip1.Size = New System.Drawing.Size(425, 28)
         Me.MenuStrip1.TabIndex = 3
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -113,12 +113,13 @@ Partial Class Snake
         Me.StartLabel.TabIndex = 4
         Me.StartLabel.Text = "Press Enter to Start"
         Me.StartLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.StartLabel.Visible = False
         '
         'Snake
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(438, 447)
+        Me.ClientSize = New System.Drawing.Size(425, 447)
         Me.Controls.Add(Me.StartLabel)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.MenuStrip1)
